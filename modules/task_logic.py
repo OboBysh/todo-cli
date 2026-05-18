@@ -47,3 +47,11 @@ def delete_task(tasks: List[Dict], task_id: int) -> Union[List[Dict], None]:
             del tasks[i]
             return tasks
     return None
+
+def edit_task_title(tasks: List[Dict], task_id: int, new_title: str) -> Union[List[Dict], None]:
+    """Изменяет название задачи по ID. Возвращает обновлённый список или None."""
+    for task in tasks:
+        if task["id"] == task_id:
+            task["title"] = new_title
+            return tasks
+    return None
