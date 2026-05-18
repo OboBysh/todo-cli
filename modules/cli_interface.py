@@ -4,9 +4,10 @@
 """
 
 import sys
-from modules.task_logic import add_task, list_tasks, complete_task, delete_task
+from modules.task_logic import add_task, list_tasks, complete_task, delete_task, edit_task_title
 from modules.file_manager import load_tasks, save_tasks
 from modules.error_handler import handle_errors, InvalidInputError, TaskNotFoundError
+
 
 
 class TodoCLI:
@@ -67,11 +68,29 @@ class TodoCLI:
         self.save()
         print(f"🗑️ Задача #{task_id} удалена")
 
+    @handle_errors
+    def edit(self, task_id_str: str, new_title: str):
+        """Изменить название задачи."""
+        try:
+            task_id = int(task_id_str)
+        except ValueError:
+            raise InvalidInputError("ID задачи должно быть целым числом")
+
+        if not new_title or not new_title.strip():
+            raise InvalidInputError("Название не может быть пустым")
+
+        result = edit_task_title(self.tasks, task_id, new_title.strip())
+        if result is None:
+            raise TaskNotFoundError(f"Задача с ID={task_id} не найдена")
+        self.save()
+        print(f"✏️ Задача #{task_id} изменена на \"{new_title}\"")
+
     def run(self):
         """Главный цикл приложения."""
         print("Добро пожаловать в Todo CLI!")
         print("Доступные команды:")
         print("  add <текст>      - добавить задачу")
+        print("  edit <id> <текст>  - изменить название задачи")
         print("  list             - показать все задачи")
         print("  complete <id>    - отметить задачу выполненной")
         print("  delete <id>      - удалить задачу")
@@ -108,6 +127,15 @@ class TodoCLI:
                         print("⚠️  Укажите ID задачи")
                     else:
                         self.delete(arg)
+                elif command == "edit":
+                    if not arg:
+                        print("⚠️  Укажите ID и новое название: edit <id> <текст>")
+                    else:
+                        parts = arg.split(maxsplit=1)
+                        if len(parts) < 2:
+                            print("⚠️  Укажите ID и новый текст")
+                        else:
+                            self.edit(parts[0], parts[1])
                 else:
                     print(f"❓ Неизвестная команда: {command}. Доступны: add, list, complete, delete, exit")
             except KeyboardInterrupt:
