@@ -1,11 +1,12 @@
 # Todo CLI Utility
+Репозиторий: https://github.com/OboBysh/todo-cli.git
 
 CLI-утилита для управления списком дел.  
 Разработана в рамках учебного кейса по модульной разработке и Git.
 
 ## Установка и запуск
 
-1. Клонируйте репозиторий.
+1. Клонируйте репозиторий: git clone https://github.com/OboBysh/todo-cli.git
 2. Создайте виртуальное окружение: `python -m venv venv`
 3. Активируйте: `source venv/bin/activate` (или `venv\Scripts\activate` на Windows)
 4. Запустите: `python main.py`
